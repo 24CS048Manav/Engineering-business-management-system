@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Place Order</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topbar">
+    <div class="container topbar-inner">
+        <a class="brand" href="index.html">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div class="brand-title">
+                <strong>Hari Krupa Engineering</strong>
+                <span>Place Order</span>
+            </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="track-order.html">Track Order</a>
+            <a class="btn" href="login.html">Login</a>
+        </nav>
+    </div>
+</div>
+
+<main class="page">
+    <div class="container">
+        <div class="section-title">Order Details (Demo)</div>
+
+        <div class="split">
+            <section class="panel" style="padding:18px;">
+                <h2 class="form-title" style="margin:0 0 8px;">Customer Information</h2>
+               
+
+                <form id="orderForm" novalidate>
+                    <div class="form-row">
+                        <div>
+                            <label for="cName">Customer Name</label>
+                            <input id="cName" type="text" placeholder="Enter full name" required>
+                        </div>
+                        <div>
+                            <label for="cPhone">Phone</label>
+                            <input id="cPhone" type="tel" placeholder="10-digit number" required>
+                        </div>
+                    </div>
+
+                    <label for="cAddress">Address</label>
+                    <textarea id="cAddress" rows="3" placeholder="Delivery address" required></textarea>
+
+                    <div class="hero-actions" style="margin-top:14px;">
+                        <button class="btn primary" type="submit">Place Order</button>
+                        <a class="btn" href="products.html">Add more items</a>
+                    </div>
+
+                    <div id="orderStatus" class="help" style="display:none; margin-top:12px;"></div>
+
+                    <div class="card" style="margin-top:14px; background: rgba(47, 143, 59, 0.06);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                            <div>
+                                <div style="font-size:12px; color: #475569;">Your Tracking ID</div>
+                                <div style="font-size:20px; font-weight:800; letter-spacing:0.02em;" id="trackingId">—</div>
+                            </div>
+                            <a class="btn" href="track-order.html">Open Tracking Page</a>
+                        </div>
+                        <p class="help" style="margin:10px 0 0;">
+                            After placing order, copy this Tracking ID and paste it into Track Order.
+                        </p>
+                    </div>
+                </form>
+            </section>
+
+            <aside class="panel summary">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <div class="pill" id="cartPill2">Cart: 0 item(s)</div>
+                    <a class="btn" href="products.html">Back to products</a>
+                </div>
+
+                <div class="section-title" style="margin-top:14px;">Items</div>
+                <div id="orderItems"></div>
+
+                <div class="section-title" style="margin-top:14px;">Totals</div>
+                <div class="row"><span>Subtotal</span><strong id="subtotal">₹0</strong></div>
+                <div class="row"><span>GST (18%)</span><strong id="gst">₹0</strong></div>
+                <div class="row"><span>Total</span><strong id="total">₹0</strong></div>
+            </aside>
+        </div>
+    </div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin — Inventory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topbar">
+    <div class="container topbar-inner">
+        <a class="brand" href="index.html">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div class="brand-title">
+                <strong>Hari Krupa Engineering</strong>
+                <span>Admin — Inventory</span>
+            </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="manage-orders.html">Orders</a>
+            <a href="billing.html">Billing</a>
+            <a href="employees.html">Employees</a>
+            <a class="btn" href="index.html">Exit Admin</a>
+        </nav>
+    </div>
+</div>
+
+<main class="page">
+    <div class="container">
+        <div class="section-title">Inventory Management</div>
+       
+
+        <table aria-label="Inventory table">
+            <thead>
+                <tr>
+                    <th style="width:35%;">Material Name</th>
+                    <th style="width:15%;">Stock</th>
+                    <th style="width:15%;">Price</th>
+                    <th style="width:20%;">Status</th>
+                    <th style="width:15%; text-align:right;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryBody">
+                <tr><td colspan="5">Loading…</td></tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        Admin inventory view. Links to <a href="products.html">Products</a> for customer view.
+    </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var products = typeof getProducts === "function" ? getProducts() : [];
+    var body = document.getElementById("inventoryBody");
+    if (!body) return;
+
+    if (products.length === 0) {
+        body.innerHTML = "<tr><td colspan=\"5\">No products found.</td></tr>";
+        return;
+    }
+
+    body.innerHTML = products.map(function(p) {
+        var status = (p.stock || 0) < 20 ? "Low stock" : "In stock";
+        return "<tr><td><strong>" + p.name + "</strong></td><td>" + (p.stock || 0) + "</td><td>" + (typeof formatINR === "function" ? formatINR(p.price) : "₹" + p.price) + "</td><td>" + status + "</td><td style=\"text-align:right;\"><a class=\"btn\" href=\"products.html\">View</a></td></tr>";
+    }).join("");
+});
+</script>
+</body>
+</html>

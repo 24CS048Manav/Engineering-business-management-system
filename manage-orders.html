@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin — Manage Orders</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="topbar">
+    <div class="container topbar-inner">
+        <a class="brand" href="index.html">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div class="brand-title">
+                <strong>Hari Krupa Engineering</strong>
+                <span>Admin — Manage Orders</span>
+            </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="inventory.html">Inventory</a>
+            <a href="billing.html">Billing</a>
+            <a href="employees.html">Employees</a>
+            <a class="btn" href="index.html">Exit Admin</a>
+        </nav>
+    </div>
+</div>
+
+<main class="page">
+    <div class="container">
+        <div class="section-title">Orders</div>
+        <p class="form-subtitle" style="margin:0 0 14px;">
+            View all orders. Status updates are demo-only (stored in browser).
+        </p>
+
+        <table aria-label="Orders table">
+            <thead>
+                <tr>
+                    <th style="width:18%;">Tracking ID</th>
+                    <th style="width:18%;">Customer</th>
+                    <th style="width:18%;">Date</th>
+                    <th style="width:12%;">Total</th>
+                    <th style="width:14%;">Status</th>
+                    <th style="width:20%; text-align:right;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="ordersBody">
+                <tr><td colspan="6">Loading…</td></tr>
+            </tbody>
+        </table>
+
+        <p class="help" style="margin-top:14px;">
+            Orders are stored in localStorage. Place orders from <a href="place-order.html">Place Order</a> to see them here.
+        </p>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        Demo order management. No backend persistence.
+    </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var orders = typeof getOrders === "function" ? getOrders() : [];
+    var setOrdersFn = typeof setOrders === "function" ? setOrders : null;
+    var body = document.getElementById("ordersBody");
+    if (!body) return;
+
+    function render() {
+        orders = typeof getOrders === "function" ? getOrders() : orders;
+        if (orders.length === 0) {
+            body.innerHTML = "<tr><td colspan=\"6\">No orders yet. Place an order from Place Order page.</td></tr>";
+            return;
+        }
+
+        var fmt = typeof formatINR === "function" ? formatINR : function(v) { return "₹" + Math.round(v); };
+        body.innerHTML = orders.map(function(o, i) {
+            var dt = o.createdAt ? new Date(o.createdAt) : new Date();
+            var cust = o.customer && o.customer.name ? o.customer.name : "—";
+            var tot = o.totals && o.totals.total ? fmt(o.totals.total) : "—";
+            var st = o.status || "Placed";
+            return "<tr data-idx=\"" + i + "\"><td><strong>" + (o.trackingId || "—") + "</strong></td><td>" + cust + "</td><td>" + dt.toLocaleDateString() + "</td><td>" + tot + "</td><td><span class=\"pill\">" + st + "</span></td><td style=\"text-align:right;\"><select class=\"statusSelect\" data-idx=\"" + i + "\"><option" + (st === "Placed" ? " selected" : "") + ">Placed</option><option" + (st === "Processing" ? " selected" : "") + ">Processing</option><option" + (st === "Shipped" ? " selected" : "") + ">Shipped</option><option" + (st === "Delivered" ? " selected" : "") + ">Delivered</option></select></td></tr>";
+        }).join("");
+
+        body.querySelectorAll(".statusSelect").forEach(function(sel) {
+            sel.addEventListener("change", function() {
+                var idx = parseInt(sel.getAttribute("data-idx"), 10);
+                var ords = typeof getOrders === "function" ? getOrders() : [];
+                if (ords[idx]) {
+                    ords[idx].status = sel.value;
+                    if (setOrdersFn) setOrdersFn(ords);
+                    render();
+                }
+            });
+        });
+    }
+
+    render();
+});
+</script>
+</body>
+</html>
